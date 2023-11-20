@@ -8,7 +8,7 @@ exports.getTopics = (req, res, next) => {
   selectTopics()
     .then((topics) => {
       if (!topics || topics.length === 0) {
-        return Promise.reject({ status: 404, message: "Topics not found" });
+        return Promise.reject({ status: 404, message: "Topics not found." });
       }
       res.status(200).send({ topics: topics });
     })

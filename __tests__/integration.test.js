@@ -13,7 +13,7 @@ describe("GET/api/healthcheck", () => {
   });
 });
 
-describe.only("GET/api/topics", () => {
+describe("GET/api/topics", () => {
   it("GET 200 response with an array of all topic objects.", () => {
     return request(app)
       .get("/api/topics")
@@ -29,4 +29,13 @@ describe.only("GET/api/topics", () => {
         });
       });
   });
+
+  // it("404 response if there are no topics or it is empty.", () => {
+  //   return request(app)
+  //     .get("/api/topics")
+  //     .expect(404)
+  //     .then((res) => {
+  //       expect(res.body.msg).toBe("Topics not found.");
+  //     });
+  // });
 });
