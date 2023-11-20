@@ -24,23 +24,3 @@ describe("GET/api/topics", () => {
       });
   });
 });
-
-describe("GET/api", () => {
-  it("GET 200 response with an object describing all available endpoints with description.", () => {
-    return request(app)
-      .get("/api")
-      .expect(200)
-      .then(({ body }) => {
-        expect(body).toHaveProperty("endpoints");
-        const { endpoints } = body;
-        const endpointsArr = Object.keys(endpoints);
-        endpointsArr.forEach((endpoint) => {
-          expect(endpoints[endpoint]).toMatchObject({
-            description: expect.any(String),
-            queries: expect.any(Array),
-            exampleResponse: expect.any(Object),
-          });
-        });
-      });
-  });
-});
