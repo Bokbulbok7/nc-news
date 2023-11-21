@@ -44,3 +44,43 @@ describe("GET/api", () => {
       });
   });
 });
+
+describe("GET/api/articles/:articleId", () => {
+  it("GET:200 sends a single article to the client", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+        const { article } = body;
+        expect(article.article_id).toBe(1);
+        expect(article).toMatchObject({
+          author: expect.any(String),
+          title: expect.any(String),
+          article_id: expect.any(Number),
+          body: expect.any(String),
+          topic: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          article_img_url: expect.any(String),
+        });
+      });
+  });
+
+  it("GET:404 sends an appropriate status and error message when given a valid but non-existent id", () => {
+    return request(app)
+      .get("/api/articles/999")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Article not found.");
+      });
+  });
+
+  it("GET:400 sends an appropriate status and error message when given an invalid id", () => {
+    return request(app)
+      .get("/api/articles/not-an-article")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Bad request.");
+      });
+  });
+});
