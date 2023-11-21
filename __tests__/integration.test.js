@@ -85,7 +85,7 @@ describe("GET/api/articles/:articleId", () => {
   });
 });
 
-describe.only("GET/api/articles", () => {
+describe("GET/api/articles", () => {
   it("GET 200 response with an array of all articles objects.", () => {
     return request(app)
       .get("/api/articles")
