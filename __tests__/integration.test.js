@@ -129,15 +129,27 @@ describe("/api/articles/:articleId/comments", () => {
         const { comments } = body;
         expect(comments).toHaveLength(11);
         comments.forEach((comment) => {
+          console.log(comment);
+          expect(comment.article_id).toBe(1);
           expect(comment).toMatchObject({
             comment_id: expect.any(Number),
             author: expect.any(String),
-            article_id: expect.any(Number),
             body: expect.any(String),
             created_at: expect.any(String),
             votes: expect.any(Number),
           });
         });
+      });
+  });
+
+  it("GET: 200 response with an array of all comments sorted by date in descending order as default sort values.", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments).toHaveLength(11);
+        expect(comments).toBeSortedBy("created_at", { descending: true });
       });
   });
 
