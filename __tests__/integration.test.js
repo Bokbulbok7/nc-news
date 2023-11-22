@@ -129,7 +129,6 @@ describe("/api/articles/:articleId/comments", () => {
         const { comments } = body;
         expect(comments).toHaveLength(11);
         comments.forEach((comment) => {
-          console.log(comment);
           expect(comment.article_id).toBe(1);
           expect(comment).toMatchObject({
             comment_id: expect.any(Number),
