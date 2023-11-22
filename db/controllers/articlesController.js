@@ -1,7 +1,9 @@
 const {
   selectArticleById,
   selectArticles,
+  checkArticleExists,
 } = require("../models/articlesModel");
+const { selectCommentsByArticleId } = require("../models/commentsModel");
 
 exports.getArticleById = (req, res, next) => {
   const { articleId } = req.params;
@@ -17,6 +19,20 @@ exports.getArticles = (req, res, next) => {
   selectArticles(sort_by)
     .then((articles) => {
       res.status(200).send({ articles: articles });
+    })
+    .catch(next);
+};
+
+exports.getCommentsByArticleId = (req, res, next) => {
+  const { articleId } = req.params;
+  const commentPromises = [selectCommentsByArticleId(articleId)];
+  if (articleId) {
+    commentPromises.push(checkArticleExists(articleId));
+  }
+  Promise.all(commentPromises)
+    .then((resolvedPromises) => {
+      const comments = resolvedPromises[0];
+      res.status(200).send({ comments: comments });
     })
     .catch(next);
 };

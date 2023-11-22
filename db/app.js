@@ -5,6 +5,7 @@ const { handleCustomErrors, handlePsqlErrors } = require("./error");
 const {
   getArticleById,
   getArticles,
+  getCommentsByArticleId,
 } = require("./controllers/articlesController");
 
 const app = express();
@@ -18,6 +19,8 @@ app.get("/api/topics", getTopics);
 app.get("/api/articles/:articleId", getArticleById);
 
 app.get("/api/articles", getArticles);
+
+app.get("/api/articles/:articleId/comments", getCommentsByArticleId);
 
 app.use(handleCustomErrors);
 
