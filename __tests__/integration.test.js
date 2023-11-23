@@ -120,7 +120,7 @@ describe("GET/api/articles", () => {
   });
 });
 
-describe("/api/articles/:articleId/comments", () => {
+describe("GET/api/articles/:articleId/comments", () => {
   it("GET: 200 sends an array of comments belonging to a single article.", () => {
     return request(app)
       .get("/api/articles/1/comments")
@@ -161,12 +161,72 @@ describe("/api/articles/:articleId/comments", () => {
       });
   });
 
-  it("GET:400 responds with an appropriate error message when given an invalid id", () => {
+  it("GET: 400 responds with an appropriate error message when given an invalid id", () => {
     return request(app)
       .get("/api/articles/not-an-id/comments")
       .expect(400)
       .then((response) => {
         expect(response.body.msg).toBe("Bad request.");
+      });
+  });
+});
+
+describe("POST /api/articles/:article_id/comments", () => {
+  it("POST: 201 should add a comment successfully.", () => {
+    const newComment = {
+      username: "lurker",
+      body: "Great article!",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(201)
+      .then(({ body }) => {
+        const { comment } = body;
+        expect(comment.article_id).toBe(1);
+        expect(comment.author).toBe("lurker");
+        expect(comment.body).toBe("Great article!");
+      });
+  });
+
+  it("POST: 400 should handle missing properties in the request body.", () => {
+    const incompleteComment = {
+      username: "lurker",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(incompleteComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Input should have username and body.");
+      });
+  });
+
+  it("POST: 400 should handle invalid article ID.", () => {
+    const newComment = {
+      username: "lurker",
+      body: "Great article!",
+    };
+    return request(app)
+      .post("/api/articles/invalid_article_id/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request.");
+      });
+  });
+
+  it("POST 404: should handle when user does not exist.", () => {
+    const newComment = {
+      username: "user1",
+      body: "wrong user.",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("User not found.");
       });
   });
 });
