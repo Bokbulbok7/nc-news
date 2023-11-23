@@ -265,7 +265,7 @@ describe("POST /api/articles/:article_id/comments", () => {
 });
 
 describe("PATCH /api/articles/:article_id", () => {
-  it("PATCH 200: returns the updated article with the incremented votes by the given amount.", () => {
+  it("PATCH: 200 returns the updated article with the incremented votes by the given amount.", () => {
     const votes = { incVotes: 5 };
     const expectedArticle = {
       article_id: 1,
@@ -288,7 +288,7 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
 
-  it("PATCH 200: returns the updated article with the decremented votes by the given amount.", () => {
+  it("PATCH: 200 returns the updated article with the decremented votes by the given amount.", () => {
     const votes = { incVotes: -7 };
     const expectedArticle = {
       article_id: 1,
@@ -351,6 +351,30 @@ describe("PATCH /api/articles/:article_id", () => {
       .expect(400)
       .then((response) => {
         expect(response.body.msg).toBe("Bad request.");
+      });
+  });
+});
+
+describe("DELETE /api/comments/:comment_id", () => {
+  it("DELETE: 204 deletes the comment by given comment ID.", () => {
+    return request(app).delete("/api/comments/1").expect(204);
+  });
+
+  it("DELETE: 400 should handle invalid comment ID.", () => {
+    return request(app)
+      .delete("/api/comments/not")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request.");
+      });
+  });
+
+  it("DELETE: 404 sends an appropriate status and error message when given a valid but non-existent id.", () => {
+    return request(app)
+      .delete("/api/comments/1000")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Comment not found.");
       });
   });
 });
