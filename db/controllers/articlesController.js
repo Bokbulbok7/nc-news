@@ -3,7 +3,11 @@ const {
   selectArticles,
   checkArticleExists,
 } = require("../models/articlesModel");
-const { selectCommentsByArticleId } = require("../models/commentsModel");
+const {
+  selectCommentsByArticleId,
+  insertCommentByArticleId,
+} = require("../models/commentsModel");
+const { checkUserExists } = require("../models/usersModel");
 
 exports.getArticleById = (req, res, next) => {
   const { articleId } = req.params;
@@ -33,6 +37,16 @@ exports.getCommentsByArticleId = (req, res, next) => {
     .then((resolvedPromises) => {
       const comments = resolvedPromises[0];
       res.status(200).send({ comments: comments });
+    })
+    .catch(next);
+};
+
+exports.postCommentByArticleId = (req, res, next) => {
+  const { articleId } = req.params;
+  const newComment = req.body;
+  return insertCommentByArticleId(articleId, newComment)
+    .then((comment) => {
+      return res.status(201).send({ comment });
     })
     .catch(next);
 };
