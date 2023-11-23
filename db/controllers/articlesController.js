@@ -2,12 +2,12 @@ const {
   selectArticleById,
   selectArticles,
   checkArticleExists,
+  updateVotesByArticleId,
 } = require("../models/articlesModel");
 const {
   selectCommentsByArticleId,
   insertCommentByArticleId,
 } = require("../models/commentsModel");
-const { checkUserExists } = require("../models/usersModel");
 
 exports.getArticleById = (req, res, next) => {
   const { articleId } = req.params;
@@ -47,6 +47,22 @@ exports.postCommentByArticleId = (req, res, next) => {
   return insertCommentByArticleId(articleId, newComment)
     .then((comment) => {
       return res.status(201).send({ comment });
+    })
+    .catch(next);
+};
+
+exports.patchVotesByArticleId = (req, res, next) => {
+  const { articleId } = req.params;
+  const { inc_votes } = req.body;
+  if (!inc_votes && inc_votes !== 0) {
+    return res.status(400).json({ msg: "Bad request." });
+  }
+  Promise.all([
+    checkArticleExists(articleId),
+    updateVotesByArticleId(articleId, inc_votes),
+  ])
+    .then((resolvedPromises) => {
+      res.status(200).send({ article: resolvedPromises[1] });
     })
     .catch(next);
 };
