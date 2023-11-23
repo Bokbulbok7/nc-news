@@ -8,7 +8,7 @@ beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
 describe("GET/api/topics", () => {
-  it("GET 200 response with an array of all topic objects.", () => {
+  it("GET: 200 response with an array of all topic objects.", () => {
     return request(app)
       .get("/api/topics")
       .expect(200)
@@ -26,7 +26,7 @@ describe("GET/api/topics", () => {
 });
 
 describe("GET/api", () => {
-  it("GET 200 response with an object describing all available endpoints with description.", () => {
+  it("GET: 200 response with an object describing all available endpoints with description.", () => {
     return request(app)
       .get("/api")
       .expect(200)
@@ -46,7 +46,7 @@ describe("GET/api", () => {
 });
 
 describe("GET/api/articles/:articleId", () => {
-  it("GET:200 sends a single article to the client", () => {
+  it("GET: 200 sends a single article to the client", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
@@ -66,7 +66,7 @@ describe("GET/api/articles/:articleId", () => {
       });
   });
 
-  it("GET:404 sends an appropriate status and error message when given a valid but non-existent id", () => {
+  it("GET: 404 sends an appropriate status and error message when given a valid but non-existent id", () => {
     return request(app)
       .get("/api/articles/999")
       .expect(404)
@@ -75,7 +75,7 @@ describe("GET/api/articles/:articleId", () => {
       });
   });
 
-  it("GET:400 sends an appropriate status and error message when given an invalid id", () => {
+  it("GET: 400 sends an appropriate status and error message when given an invalid id", () => {
     return request(app)
       .get("/api/articles/not-an-article")
       .expect(400)
@@ -86,7 +86,7 @@ describe("GET/api/articles/:articleId", () => {
 });
 
 describe("GET/api/articles", () => {
-  it("GET 200 response with an array of all articles objects.", () => {
+  it("GET: 200 response with an array of all articles objects.", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
@@ -230,7 +230,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 
-  it("POST 404: should handle when user does not exist.", () => {
+  it("POST: 404 should handle when user does not exist.", () => {
     const newComment = {
       username: "user1",
       body: "wrong user.",
@@ -244,7 +244,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 
-  it("POST 200: should create a comment even if extra properties are passed.", () => {
+  it("POST: 200 should create a comment even if extra properties are passed.", () => {
     const newComment = {
       username: "lurker",
       body: "Great article!",
@@ -375,6 +375,25 @@ describe("DELETE /api/comments/:comment_id", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("Comment not found.");
+      });
+  });
+});
+
+describe("GET/api/users", () => {
+  it("GET: 200 response with an array of all user objects.", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        const { users } = body;
+        expect(users).toHaveLength(4);
+        users.forEach((user) => {
+          expect(user).toMatchObject({
+            username: expect.any(String),
+            name: expect.any(String),
+            avatar_url: expect.any(String),
+          });
+        });
       });
   });
 });

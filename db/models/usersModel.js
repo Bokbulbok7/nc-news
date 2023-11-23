@@ -15,3 +15,9 @@ exports.checkUserExists = (username) => {
       }
     });
 };
+
+exports.selectUsers = () => {
+  return db.query("SELECT * FROM users;").then((result) => {
+    return result.rows;
+  });
+};
