@@ -50,23 +50,3 @@ exports.postCommentByArticleId = (req, res, next) => {
     })
     .catch(next);
 };
-
-// exports.postCommentByArticleId = (req, res, next) => {
-//   const { articleId } = req.params;
-//   const newComment = req.body;
-//   const { username, body } = newComment;
-//   const commentPromises = [insertCommentByArticleId(articleId, newComment)];
-//   if (articleId) {
-//     commentPromises.push(checkArticleExists(articleId));
-//if (username) {
-//     commentPromises.push(checkUserExists(username));
-//   }
-//   }
-//
-//   Promise.all(commentPromises)
-//     .then((resolvedPromises) => {
-//       const comment = resolvedPromises[0];
-//       res.status(201).send({ comment });
-//     })
-//     .catch(next);
-// };

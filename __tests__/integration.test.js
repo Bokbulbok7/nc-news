@@ -202,6 +202,20 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 
+  it("POST: 404 sends an appropriate status and error message when given a valid but non-existent id", () => {
+    const newComment = {
+      username: "lurker",
+      body: "Great article!",
+    };
+    return request(app)
+      .post("/api/articles/569/comments")
+      .send(newComment)
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Article not found.");
+      });
+  });
+
   it("POST: 400 should handle invalid article ID.", () => {
     const newComment = {
       username: "lurker",
@@ -227,6 +241,25 @@ describe("POST /api/articles/:article_id/comments", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("User not found.");
+      });
+  });
+
+  it("should create a comment even if extra properties are passed", () => {
+    const newComment = {
+      username: "lurker",
+      body: "Great article!",
+      extraProperty: "Extra info.",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(201)
+      .then(({ body }) => {
+        const { comment } = body;
+        expect(comment.article_id).toBe(1);
+        expect(comment.author).toBe("lurker");
+        expect(comment.body).toBe("Great article!");
+        expect(comment).not.toHaveProperty("extraProperty");
       });
   });
 });
