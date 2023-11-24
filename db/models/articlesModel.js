@@ -34,11 +34,11 @@ exports.checkArticleExists = (articleId) => {
     });
 };
 
-exports.updateVotesByArticleId = (articleId, incVotes) => {
+exports.updateVotesByArticleId = (articleId, inc_votes) => {
   return db
     .query(
       `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *;`,
-      [incVotes, articleId]
+      [inc_votes, articleId]
     )
     .then(({ rows }) => {
       return rows[0];
