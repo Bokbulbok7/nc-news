@@ -287,7 +287,7 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(body.article).toEqual(expectedArticle);
       });
   });
-  
+
   it("PATCH: 200 returns the updated article with the decremented votes by the given amount.", () => {
     const votes = { inc_votes: -7 };
     const expectedArticle = {
@@ -394,6 +394,47 @@ describe("GET/api/users", () => {
             avatar_url: expect.any(String),
           });
         });
+      });
+  });
+});
+
+describe("GET/api/articles?topic", () => {
+  it("GET: 200 responds with an article of a specific topic query.", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toHaveLength(12);
+        articles.forEach((article) => {
+          expect(article.topic).toBe("mitch");
+          expect(article).toMatchObject({
+            title: expect.any(String),
+            author: expect.any(String),
+            created_at: expect.any(String),
+            article_img_url: expect.any(String),
+          });
+        });
+      });
+  });
+
+  it("GET: 200 responds with an empty array when there are no articles for the given topic.", () => {
+    return request(app)
+      .get("/api/articles?topic=paper")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toHaveLength(0);
+        expect(articles).toEqual([]);
+      });
+  });
+
+  it("GET: 404 responds with an error message when topic doesn't exist.", () => {
+    return request(app)
+      .get("/api/articles?topic=abcd")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Topic not found.");
       });
   });
 });
