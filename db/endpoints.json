@@ -94,6 +94,16 @@
     "queries": [],
     "exampleResponse": {}
   },
+  "GET /api/users": {
+    "description": "serves of an array  all users.",
+    "queries": [],
+    "exampleResponse": {
+      "users": [
+        {"username": "user1", "name": "User 1", "avatar_url": "https://example.com/avatar1.jpg"},
+        {"username": "user2", "name": "User 2", "avatar_url": "https://example.com/avatar2.jpg"}
+      ]
+    }
+    },
   "PATCH /api/articles/:articleId": {
     "description": "updates an article's vote count by its article_id",
     "queries": [],
