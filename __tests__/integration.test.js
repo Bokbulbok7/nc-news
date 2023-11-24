@@ -287,9 +287,10 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(body.article).toEqual(expectedArticle);
       });
   });
-
+  
   it("PATCH: 200 returns the updated article with the decremented votes by the given amount.", () => {
     const votes = { incVotes: -7 };
+
     const expectedArticle = {
       article_id: 1,
       title: "Living in the shadow of a great man",
@@ -311,7 +312,7 @@ describe("PATCH /api/articles/:article_id", () => {
   });
 
   it("PATCH: 404 sends an appropriate status and error message when given a valid but non-existent id.", () => {
-    const votes = { incVotes: 10 };
+    const votes = { inc_votes: 10 };
     return request(app)
       .patch("/api/articles/999")
       .send(votes)
@@ -322,7 +323,7 @@ describe("PATCH /api/articles/:article_id", () => {
   });
 
   it("PATCH: 400 should handle invalid article ID.", () => {
-    const votes = { incVotes: 10 };
+    const votes = { inc_votes: 10 };
     return request(app)
       .patch("/api/articles/not-an-article")
       .send(votes)
@@ -344,7 +345,7 @@ describe("PATCH /api/articles/:article_id", () => {
   });
 
   it("PATCH: 400 should respond with 400 if inc_votes value is not a number.", () => {
-    const votes = { incVotes: "notANumber" };
+    const votes = { inc_votes: "notANumber" };
     return request(app)
       .patch("/api/articles/1")
       .send(votes)

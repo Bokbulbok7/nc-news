@@ -53,13 +53,13 @@ exports.postCommentByArticleId = (req, res, next) => {
 
 exports.patchVotesByArticleId = (req, res, next) => {
   const { articleId } = req.params;
-  const { incVotes } = req.body;
-  if (!incVotes && incVotes !== 0) {
+  const { inc_votes } = req.body;
+  if (!inc_votes && inc_votes !== 0) {
     return res.status(400).json({ msg: "Bad request." });
   }
   Promise.all([
     checkArticleExists(articleId),
-    updateVotesByArticleId(articleId, incVotes),
+    updateVotesByArticleId(articleId, inc_votes),
   ])
     .then((resolvedPromises) => {
       res.status(200).send({ article: resolvedPromises[1] });
