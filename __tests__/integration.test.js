@@ -290,7 +290,6 @@ describe("PATCH /api/articles/:article_id", () => {
   
   it("PATCH: 200 returns the updated article with the decremented votes by the given amount.", () => {
     const votes = { incVotes: -7 };
-
     const expectedArticle = {
       article_id: 1,
       title: "Living in the shadow of a great man",
