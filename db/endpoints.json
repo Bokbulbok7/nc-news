@@ -40,7 +40,7 @@
     }
   },
   "GET /api/articles/:articleId": {
-    "description": "serves an article for a specific articleId",
+    "description": "serves an article for a specific articleId and adds a count of comments.",
     "queries": [],
     "exampleResponse": {
       "article": 
@@ -52,9 +52,9 @@
           "topic": "cooking",
           "created_at": "2018-05-30T15:59:13.341Z",
           "votes": 0,
-          "article_img_url": "some_url"
-        }
-      
+          "article_img_url": "some_url",
+          "comment_count": 7
+        }     
     }
   }, 
   "GET /api/articles/:articleId/comments": {
@@ -88,6 +88,39 @@
         "created_at": "2023-11-24T10:05:00.000Z"
       }
     }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes a comment by its comment_id.",
+    "queries": [],
+    "exampleResponse": {}
+  },
+  "GET /api/users": {
+    "description": "serves of an array  all users.",
+    "queries": [],
+    "exampleResponse": {
+      "users": [
+        {"username": "user1", "name": "User 1", "avatar_url": "https://example.com/avatar1.jpg"},
+        {"username": "user2", "name": "User 2", "avatar_url": "https://example.com/avatar2.jpg"}
+      ]
+    }
+    },
+  "PATCH /api/articles/:articleId": {
+    "description": "updates an article's vote count by its article_id",
+    "queries": [],
+    "requestBody": {
+      "inc_votes": "number"
+    },
+    "exampleResponse": {
+      "article": {
+        "title": "Seafood substitutions are increasing",
+        "topic": "cooking",
+        "author": "weegembump",
+        "body": "Text from the article..",
+        "created_at": "2018-05-30T15:59:13.341Z",
+        "votes": 1,
+        "article_img_url": "https://example.com/image.jpg",
+        "comment_count": 6
+      }
+    }
   }
-  
 }
