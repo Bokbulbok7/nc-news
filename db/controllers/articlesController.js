@@ -8,6 +8,7 @@ const {
   selectCommentsByArticleId,
   insertCommentByArticleId,
 } = require("../models/commentsModel");
+const { checkTopicExists } = require("../models/topicsModel");
 
 exports.getArticleById = (req, res, next) => {
   const { articleId } = req.params;
@@ -19,12 +20,20 @@ exports.getArticleById = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  const { sort_by } = req.query;
-  selectArticles(sort_by)
-    .then((articles) => {
-      res.status(200).send({ articles: articles });
-    })
-    .catch(next);
+  const { topic } = req.query;
+  if (topic) {
+    Promise.all([checkTopicExists(topic), selectArticles(topic)])
+      .then(([topicResult, articles]) => {
+        res.status(200).send({ articles });
+      })
+      .catch(next);
+  } else {
+    selectArticles(topic)
+      .then((articles) => {
+        res.status(200).send({ articles: articles });
+      })
+      .catch(next);
+  }
 };
 
 exports.getCommentsByArticleId = (req, res, next) => {
