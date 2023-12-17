@@ -17,7 +17,7 @@ exports.selectArticleById = (articleId) => {
     });
 };
 
-exports.selectArticles = (topic) => {
+exports.selectArticles = (topic, sortBy = "created_at", sortOrder = "DESC") => {
   const param = [];
   let queryString = `SELECT articles.author, articles.title, articles.article_id, articles.topic, 
   articles.created_at, articles.votes, articles.article_img_url, COUNT (comments.comment_id):: int AS comment_count
@@ -28,7 +28,7 @@ exports.selectArticles = (topic) => {
   }
   queryString += `GROUP BY articles.author, articles.title, articles.article_id, articles.topic, 
   articles.created_at, articles.votes, articles.article_img_url
-  ORDER BY articles.created_at DESC;`;
+  ORDER BY ${sortBy} ${sortOrder};`;
   return db.query(queryString, param).then((data) => {
     return data.rows;
   });

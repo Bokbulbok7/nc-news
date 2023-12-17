@@ -1,4 +1,4 @@
-const app = require("../db/app");
+const app = require("../app");
 const request = require("supertest");
 const db = require("../db/connection");
 const testData = require("../db/data/test-data");
@@ -436,7 +436,7 @@ describe("GET/api/articles?topic", () => {
       .then(({ body }) => {
         expect(body.msg).toBe("Topic not found.");
       });
-  }); 
+  });
 });
 
 describe("GET/api/articles/:article_id(comment_count)", () => {
