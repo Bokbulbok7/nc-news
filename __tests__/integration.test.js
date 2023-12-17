@@ -118,6 +118,61 @@ describe("GET/api/articles", () => {
         expect(articles).toBeSortedBy("created_at", { descending: true });
       });
   });
+
+  it("GET: 200 response with articles sorted by comment count in ascending order.", () => {
+    return request(app)
+      .get("/api/articles?sort_by=comment_count&order=ASC")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toHaveLength(13);
+        expect(articles).toBeSortedBy("comment_count", { descending: false });
+      });
+  });
+
+  it("GET: 200 response with articles sorted by comment count in descending order.", () => {
+    return request(app)
+      .get("/api/articles?sort_by=comment_count&order=DESC")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toHaveLength(13);
+        expect(articles).toBeSortedBy("comment_count", { descending: true });
+      });
+  });
+
+  it("GET: 200 response with articles sorted by votes in ascending order.", () => {
+    return request(app)
+      .get("/api/articles?sort_by=votes&order=ASC")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toHaveLength(13);
+        expect(articles).toBeSortedBy("votes", { descending: false });
+      });
+  });
+
+  it("GET: 200 response with articles sorted by votes in descending order.", () => {
+    return request(app)
+      .get("/api/articles?sort_by=votes&order=DESC")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toHaveLength(13);
+        expect(articles).toBeSortedBy("votes", { descending: true });
+      });
+  });
+
+  it("GET: 200 response with articles sorted by created_at in ascending order.", () => {
+    return request(app)
+      .get("/api/articles?sort_by=created_at&order=ASC")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toHaveLength(13);
+        expect(articles).toBeSortedBy("created_at", { descending: false });
+      });
+  });
 });
 
 describe("GET/api/articles/:articleId/comments", () => {

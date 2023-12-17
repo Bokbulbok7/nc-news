@@ -17,10 +17,11 @@ exports.selectArticleById = (articleId) => {
     });
 };
 
-exports.selectArticles = (topic, sortBy = "created_at", sortOrder = "DESC") => {
+exports.selectArticles = (topic, sort_by = "created_at", order = "DESC") => {
   const param = [];
   let queryString = `SELECT articles.author, articles.title, articles.article_id, articles.topic, 
-  articles.created_at, articles.votes, articles.article_img_url, COUNT (comments.comment_id):: int AS comment_count
+  articles.created_at, articles.votes, articles.article_img_url, 
+  COUNT (comments.comment_id) :: int AS comment_count
   FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id `;
   if (topic) {
     queryString += `WHERE articles.topic = $1 `;
@@ -28,7 +29,7 @@ exports.selectArticles = (topic, sortBy = "created_at", sortOrder = "DESC") => {
   }
   queryString += `GROUP BY articles.author, articles.title, articles.article_id, articles.topic, 
   articles.created_at, articles.votes, articles.article_img_url
-  ORDER BY ${sortBy} ${sortOrder};`;
+  ORDER BY ${sort_by} ${order};`;
   return db.query(queryString, param).then((data) => {
     return data.rows;
   });
